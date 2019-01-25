@@ -183,7 +183,7 @@ DELETE FROM {_tableName} WHERE process_id = @processId;";
                             receivedTransportMessage = new TransportMessage(headersDictionary, body);
                         }
                     }
-                    catch (SqlException sqlException) when (sqlException.Number == OperationCancelledNumber)
+                    catch (MySqlException sqlException) when (sqlException.Number == OperationCancelledNumber)
                     {
                         // ADO.NET does not throw the right exception when the task gets cancelled - therefore we need to do this:
                         throw new TaskCanceledException("Receive operation was cancelled", sqlException);
@@ -225,7 +225,7 @@ DELETE FROM {_tableName} WHERE process_id = @processId;";
             {
                 AsyncHelpers.RunSync(CreateSchema);
             }
-            catch (SqlException exception)
+            catch (MySqlException exception)
             {
                 throw new RebusApplicationException(exception, $"Error attempting to initialize SQL transport schema with mesages table [dbo].[{_tableName}]");
             }
