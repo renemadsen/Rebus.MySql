@@ -5,6 +5,7 @@ using Rebus.MySql.Transport;
 using Rebus.Pipeline;
 using Rebus.Pipeline.Receive;
 using Rebus.Threading;
+using Rebus.Time;
 using Rebus.Timeouts;
 using Rebus.Transport;
 
@@ -20,9 +21,9 @@ namespace Rebus.Config
         /// store messages, and the "queue" specified by <paramref name="inputQueueName"/> will be used when querying for messages.
         /// The message table will automatically be created if it does not exist.
         /// </summary>
-        public static void UseMySql(this StandardConfigurer<ITransport> configurer, string connectionStringOrConnectionOrConnectionStringName, string tableName, string inputQueueName)
+        public static void UseMySql(this StandardConfigurer<ITransport> configurer, string connectionString, string tableName, string inputQueueName)
         {
-            Configure(configurer, loggerFactory => new MySqlConnectionHelper(connectionStringOrConnectionOrConnectionStringName), tableName, inputQueueName);
+            Configure(configurer, loggerFactory => new MySqlConnectionHelper(connectionString), tableName, inputQueueName);
         }
 
         /// <summary>
@@ -30,9 +31,9 @@ namespace Rebus.Config
         /// The table specified by <paramref name="tableName"/> will be used to store messages.
         /// The message table will automatically be created if it does not exist.
         /// </summary>
-        public static void UsePostgreSqlAsOneWayClient(this StandardConfigurer<ITransport> configurer, string connectionStringOrConnectionStringName, string tableName)
+        public static void UsePostgreSqlAsOneWayClient(this StandardConfigurer<ITransport> configurer, string connectionString, string tableName)
         {
-            Configure(configurer, loggerFactory => new MySqlConnectionHelper(connectionStringOrConnectionStringName), tableName, null);
+            Configure(configurer, loggerFactory => new MySqlConnectionHelper(connectionString), tableName, null);
 
             OneWayClientBackdoor.ConfigureOneWayClient(configurer);
         }
@@ -44,7 +45,8 @@ namespace Rebus.Config
                 var rebusLoggerFactory = context.Get<IRebusLoggerFactory>();
                 var asyncTaskFactory = context.Get<IAsyncTaskFactory>();
                 var connectionProvider = connectionProviderFactory(rebusLoggerFactory);
-                var transport = new MySqlTransport(connectionProvider, tableName, inputQueueName, rebusLoggerFactory, asyncTaskFactory);
+                var rebusTime = context.Get<IRebusTime>();
+                var transport = new MySqlTransport(connectionProvider, tableName, inputQueueName, rebusLoggerFactory, asyncTaskFactory, rebusTime);
                 transport.EnsureTableIsCreated();
                 return transport;
             });
