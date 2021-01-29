@@ -5,7 +5,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Rebus.MySql.Tests</RootNamespace>
     <AssemblyName>Rebus.MySql.Tests</AssemblyName>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net5.0</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -29,10 +29,15 @@
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <DefineConstants>NETSTANDARD2_0</DefineConstants>
   </PropertyGroup>
+    <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.1' ">
+        <DefineConstants>NETSTANDARD2_0</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(TargetFramework)' == 'net5.0' ">
+        <DefineConstants>NETSTANDARD2_0</DefineConstants>
+    </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Rebus.MySql\Rebus.MySql.csproj" />
     <PackageReference Include="nunit" Version="3.12.0" />
-    <PackageReference Include="rebus" Version="5.4.0" />
     <PackageReference Include="rebus.tests.contracts" Version="5.2.0" />
   </ItemGroup>
   <ItemGroup>
