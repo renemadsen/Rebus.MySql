@@ -1,0 +1,24 @@
+version: 2
+updates:
+- package-ecosystem: nuget
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "04:00"
+  open-pull-requests-limit: 10
+  target-branch: net50
+  ignore:
+  - dependency-name: Rebus
+    versions:
+    - 6.4.1
+    - 6.5.0
+    - 6.5.2
+    - 6.5.3
+    - 6.5.4
+  - dependency-name: nunit
+    versions:
+    - 3.13.0
+    - 3.13.1
+  - dependency-name: MySql.Data
+    versions:
+    - 8.0.23
